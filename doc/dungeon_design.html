@@ -1,0 +1,139 @@
+<html>
+  <head>
+    <title>
+      Random Dungeon Design: The Secret Workings of Jamis Buck's Dungeon Generator
+    </title>
+    <style type="text/css">
+      body { font: 12pt sans-serif; }
+      h2 { text-align: center; }
+      h3 { text-align: center; font-style: italic; }
+      .intro { text-align: justify;
+               font-style: italic;
+               margin-left: 25%;
+               margin-right: 25%; }
+      .expl { text-align: justify;
+              font-style: normal;
+              margin-left: 12.5%;
+              margin-right: 12.5%; }
+      .part { text-align: left;
+              font-weight: bold;
+              font-size: 125%;
+              margin-left: 12.5%;
+              margin-right: 12.5;
+              margin-top: 1cm; }
+    </style>
+  </head>
+  <body>
+    <h2>Random Dungeon Design</h2>
+    <h3>The Secret Workings<br />of<br />Jamis Buck's Dungeon Generator</h3>
+    <hr align="center" width="50%" size="1" />
+
+    <p class="intro">So you've tried my <a href="http://dnd.jamisbuck.org/dungeon.cgi">Dungeon Generator</a> once or twice, and it's got you thinking. Perhaps you're a programmer and would like to incorporate similar features in a program of your own.  Or maybe you're not a programmer, but would be interested in an overview of how this program works.</p>
+
+    <p class="intro">Either way, I've been asked how this random dungeon generator works many, many times, and I finally decided that, to save myself time, I'd just put up the description on a web page.</p>
+
+    <p class="intro">If you find this explanation useful, please let me know.  Likewise, if you feel that I was too technical, or not techinical enough, or too ambiguous, let me know that, too, and I can try and improve it.</p>
+
+    <p class="intro">Please send all comments, questions, suggestions, and flames to: jamis at jamisbuck dot org.</p>
+
+    <hr align="center" width="50%" size="1" />
+
+
+    <a name="I"></a>
+    <div class="part">I. A Dungeon is a Maze</div>
+
+    <p class="expl">First of all, it is helpful to think of any dungeon as simply a maze&mdash;a collection of corridors that turn every which way. The first part of generating any dungeon, then, is to create a random maze.</p>
+
+    <p class="expl">Now, there are <em>lots</em> of different ways to generate mazes (for some idea of how many different types of mazes and algorithms there are, check out the <a href="http://www.astrolog.org/labyrnth/algrithm.htm">Maze Algorithms</a> page at <a href="http://www.astrolog.org/labyrnth.htm">Think Labyrinth</a>).  For the dungeon generator, I just picked a straightforward algorithm that I'm pretty familiar with&mdash;it's a variation on the "Hunt-and-Kill" algorithm. The algorithm creates a <em>2D</em>, <em>normal</em>, <em>orthoganol</em>, <em>perfect</em> maze, which simply means that the maze is rectangular, with all passages intersecting at right angles, and that there are no loops or inaccessible areas in the maze.</p>
+
+    <p class="expl">Here's how the algorithm I picked works.  Feel free to substitute this one with any other algorithm.</p>
+
+    <ol class="expl">
+      <li>Start with a rectangular grid, <em>x</em> units wide and <em>y</em> units tall. Mark each cell in the grid <em>unvisited</em>.</li>
+      <li>Pick a random cell in the grid and mark it <em>visited</em>. This is the <em>current cell</em>.</li>
+      <li>From the current cell, pick a random direction (north, south, east, or west). If (1) there is no cell adjacent to the current cell in that direction, or (2) if the adjacent cell in that direction has been visited, then that direction is <em>invalid</em>, and you must pick a different random direction. If all directions are invalid, pick a different random <em>visited</em> cell in the grid and start this step over again.</li>
+      <li>Let's call the cell in the chosen direction <em>C</em>. Create a corridor between the current cell and <em>C</em>, and then make <em>C</em> the current cell.  Mark <em>C</em> visited.</li>
+      <li>Repeat steps 3 and 4 until all cells in the grid have been visited.</li>
+    </ol>
+
+    <p class="expl">Once that process finishes, you'll have your maze!  There are a few variations you can do to make the maze more interesting; for example, my dungeon generator has a parameter called "randomness".  This is a percentage value (0&ndash;100) that determines how often the direction of a corridor changes.  If the value of <em>randomness</em> is 0, the corridors go straight until they run into a wall or another corridor&mdash;you wind up with a maze with lots of long, straight halls.  If the <em>randomness</em> is 100, you get the algorithm given above&mdash;corridors that twist and turn unpredictably from cell to cell.</p>
+
+    <a name="II"></a>
+    <div class="part">II. Mazes vs. Dungeons</div>
+
+    <p class="expl">It is important to note that the algorithm given above results in no loops in the maze.  It is also important to note that the algorithm results in a <em>dense</em> maze&mdash;that is, every cell contains a corridor.</p>
+
+    <p class="expl">This "pure" maze is probably not what you had in mind when you asked for a dungeon. For example, sometimes a dungeon passage intersects with another passage, or with itself, forming a loop. Also, an underground dungeon may cover a lot of territory, but not fill every square meter of rock&mdash;it is probably <em>sparse</em>, as opposed to <em>dense</em>.</p>
+
+    <p class="expl">There are two steps I used to convert the maze into something more like a dungeon (though still lacking rooms).</p>
+
+    <p class="expl">The first step involves a parameter I called <em>sparseness</em>.  It is an integer value; you may want to experiment with it to arrive at a value (or set of values) that work best for you. It is used as follows:</p>
+
+    <ol class="expl">
+      <li>Look at every cell in the maze grid.  If the given cell contains a corridor that exits the cell in only one direction (in otherwords, if the cell is the end of a dead-end hallway), "erase" that cell by removing the corridor.</li>
+      <li>Repeat step #1 <em>sparseness</em> times (ie, if <em>sparseness</em> is 5, repeat step #1 five times).</li>
+    </ol>
+
+    <p class="expl">After <em>sparsifying</em> the maze, you should wind up with large "blank" gaps, where no passages go.  The maze, however, is still <em>perfect</em>, meaning that it has no loops, and that no corridor is inaccessible from any other corridor.</p>
+
+    <p class="expl">The next step is to remove dead-ends by adding loops to the maze.  The "deadends removed" parameter of my generator is a percentage value that represents the chance a given dead-end in the maze has of being removed.  It is used as follows:</p>
+
+    <ol class="expl">
+      <li>Look at every cell in the maze grid.  If the given cell is a dead-end cell (meaning that a corridor enters but does not exit the cell), it is a candidate for "dead-end removal."</li>
+      <li>Roll d% (ie, pick a number between 1 and 100, inclusive).  If the result is less than or equal to the "deadends removed" parameter, this deadend should be removed. Otherwise, proceed to the next candidate cell.</li>
+      <li>Remove the dead-end by performing step #3 of the maze generation algorithm, above, except that a cell is not considered invalid if it has been visited. Stop when you intersect an existing corridor.</li>
+    </ol>
+
+    <p class="expl">So, now you have something looking more like a dungeon. All it lacks, now, are rooms&hellip;</p>
+
+    <a name="III"></a>
+    <div class="part">III. Room Generation and Placement</div>
+
+    <p class="expl">This was perhaps the trickiest step.  Looking at my generator, you'll see three parameters: "room count" (<em>R<sub>n</sub></em>), "room width", (<em>R<sub>w</sub></em>), and "room height" (<em>R<sub>h</sub></em>).</p>
+
+    <p class="expl">Generating rooms is actually easy: <em>R<sub>w</sub></em> is just a random number between the minimum and maximum widths.  <em>R<sub>h</sub></em> is generated similarly.</p>
+
+    <p class="expl">Placing the rooms was trickier.  The idea is to find a place in the maze where the given room overlaps a minimum of corridors and other rooms, but where the room touches a corridor in at least on place. To this end, I implemented a <em>weighting system</em>.</p>
+
+    <p class="expl">The program tries to put the room at every possible place in the dungeon. The algorithm works as follows:</p>
+
+    <ol class="expl">
+      <li>Set the "best" score to <em>infinity</em> (or some arbitrarily huge number).</li>
+      <li>Generate a room such that <em>W<sub>min</sub></em> &lt;= <em>R<sub>w</sub></em> &lt;= <em>W<sub>max</sub></em> and <em>H<sub>min</sub></em> &lt;= <em>R<sub>h</sub></em> &lt;= <em>H<sub>max</sub></em>.</li>
+      <li>For each cell <em>C</em> in the dungeon, do the following:
+        <ol type="a">
+          <li>Put the upper-left corner of the room at <em>C</em>. Set the "current" score to 0.</li>
+          <li>For each cell of the room that is adjacent to a corridor, add 1 to the current score.</li>
+          <li>For each cell of the room that overlaps a corridor, add 3 to the current score.</li>
+          <li>For each cell of the room that overlaps a room, add 100 to the current score.</li>
+          <li>If the current score is less than the best score, set the best score to the current score and note <em>C</em> as the best position seen yet.</li>
+        </ol>
+      </li>
+      <li>Place the room at the best position (where the best score was found).</li>
+      <li>For every place where the room is adjacent to a corridor or a room, add a door. (If you don't want doors everywhere, add another parameter that determines when a door should be placed, and when an empty doorway [ie, archway, etc.] should be placed).</li>
+      <li>Repeat steps 2 through 6 until all rooms have been placed.</li>
+    </ol>
+
+
+    <a name="IV"></a>
+    <div class="part">IV. Populating the Dungeon</div>
+
+    <p class="expl">I won't go into any great detail here, since I took the algorithms for this part straight from the <em>Dungeon Master's Guide</em>.  The idea is simply to put <em>something</em> in each room of the dungeon: hidden treasure, a monster, some description, etc.  At this stage, you also determine whether any given door is secret or concealed, and also what the door's properties are (wooden, locked, trapped, etc, etc.). Random tables work quite well to determine all of this.</p>
+
+
+    <a name="V"></a>
+    <div class="part">V. <i>Finis</i></div>
+
+    <p class="expl">And that, as they say, is the proverbial that.  All that remains is to display the dungeon, and that has nothing to do with dungeon generation algorithms. :)</p>
+
+    <p class="expl">Feel free to download the source code for my dungeon generator&mdash;that's where you'll find the <em>real</em> technical explanation. The sources are a bastardized mix of C and C++, but fairly readable for all of that. The "jbmaze.cpp" file  contains the maze generation algorithms, and the "jbdungeon.cpp" file contains the dungeon generation stuff.  The "jbdungeondata.cpp" file populates the dungeon.</p>
+
+    <p class="expl">The sources can be obtained on GitHub: <a href="http://github.com/jamis/dnd-dungeon">http://github.com/jamis/dnd-dungeon</a>. (Note, though, that building the thing will require tinkering with Makefiles, and rationing your patience.)</p>
+
+    <p class="expl">Enjoy!</p>
+
+    <hr align="center" width="75%" size="1" />
+
+    <p class="expl"><em>This document last updated on 10 September 2008 by Jamis Buck.</em></p>
+  </body>
+</html>

@@ -1,0 +1,423 @@
+<html lang="en">
+  <head>
+    <title>Dungeon Generator</title>
+    <link rel="stylsheet" type="text/css" href="generators.css" />
+    <script language="Javascript">
+        <!--//begin
+          function helpWidth() {
+            alert( "Width\n\nThis is how wide the dungeon is." );
+          }
+
+          function helpHeight() {
+            alert( "Height\n\nThis is how tall the dungeon is." );
+          }
+
+          function helpSparseness() {
+            alert( "Sparseness\n\nThis defines how \"sparse\" the dungeon is.  A dense dungeon " +
+                   "has only one square separating all corridors.  A sparser dungeon makes the " +
+                   "corridors further apart, and also has the effect of reducing the number of " +
+                   "corridors." );
+          }
+
+          function helpRandomness() {
+            alert( "Randomness\n\nThis determines how often a corridor bends.  A dungeon with a " +
+                   "low percentage of randomness will have many long, straight corridors with few " +
+                   "bends in them.  A very random dungeon will have very windy corridors." );
+          }
+
+          function helpDeadends() {
+            alert( "Deadends Removed\n\nThis defines what percentage of deadend corridors are " +
+                   "\"removed\".  This is typically done by connecting the end of one corridor " +
+                   "with the next nearest corridor, and may form a loop at the end of the hall " +
+                   "if the deadend is reconnected to the same corridor." );
+          }
+
+          function helpLevel() {
+            alert( "Level\n\nThis is the level of the dungeon to generate, and determines the " +
+                   "difficulty of the monsters encountered in the dungeon." );
+          }
+
+          function helpRandomSeed() {
+            alert( "Random Seed\n\nEvery dungeon that is generated has a random seed value associated " +
+                   "with it.  After generating a dungeon, the seed value for that dungeon may be found " +
+                   "by looking immediately below the map.  If you were to put that number into this field " +
+                   "and set all the parameters the same way they were the first time you generated that " +
+                   "map, you would get the exact same dungeon again.  This is useful for debugging, and " +
+                   "for sharing dungeons with friends." );
+          }
+
+          function helpRoomCount() {
+            alert( "Room Count\n\nThis determines how many rooms exist in the dungeon.  It is a relative " +
+                   "value, based on the size and sparseness of the dungeon.  A dungeon with \"too many\" " +
+                   "rooms will be very crowded, with very few corridors but lots of doors.  A dungeon with " +
+                   "no rooms will be all corridor (a maze, essentially)." );
+          }
+
+          function helpRoomWidth() {
+            alert( "Room Width\n\nThis is how wide the rooms in the dungeon are.  You specify the minimum " +
+                   "and maximum widths, in \"squares\" (ie, grid squares)." );
+          }
+
+          function helpRoomHeight() {
+            alert( "Room Height\n\nThis is how deep the rooms in the dungeon are.  You specify the minimum " +
+                   "and maximum depths, in \"squares\" (ie, grid squares)." );
+          }
+
+          function helpSecretDoors() {
+            alert( "Secret Doors\n\nThis is specified as a percentage of the doors in the dungeon that " +
+                   "should be secret doors.  If the dungeon has no rooms, it will have no doors, and thus " +
+                   "no secret doors, either." );
+          }
+
+          function helpConcealedDoors() {
+            alert( "Concealed Doors\n\nThis is specified as a percentage of the doors in the dungeon that " +
+                   "should be concealed.  If the dungeon has no rooms, it will have no doors, and thus " +
+                   "no concealed doors, either." );
+          }
+
+          function helpGridResolution() {
+            alert( "Grid Resolution\n\nThis is how large the squares are on the map.  Specifying a smaller " +
+                   "grid resolution will make large maps somewhat smaller, and specifying a larger grid " +
+                   "resolution will make them larger." );
+          }
+        //end-->
+     </script>
+  </head>
+
+  <body bgcolor="white">
+    <H2>Dungeon Generator</H2>
+
+    <p>Welcome to the Dungeons &amp; Dragons &copy; random dungeon generator!  Configure the dungeon by selecting from the options below, and then click the "Generate Dungeon" button to see the result.</p>
+    
+    <p>Not sure what the different options mean?  Click on their names to see a window describing what each one does, and how they modify the dungeons that are generated.</p>
+
+    <hr size="1" />
+
+    <DIV CLASS="NORMAL">
+    <FORM NAME="dungeon" ACTION="<!--%CGINAME%-->" METHOD="GET" TARGET="DUNGEON">
+      <TABLE BORDER=0>
+        <TR>
+          <TD CLASS="NORMAL">
+            <a href="javascript:helpWidth()">Width</a>:
+          </TD>
+          <TD CLASS="NORMAL">
+            <SELECT NAME="width">
+              <OPTION VALUE="2">Fine</OPTION>
+              <OPTION VALUE="4">Diminutive</OPTION>
+              <OPTION VALUE="8">Tiny</OPTION>
+              <OPTION VALUE="12">Small</OPTION>
+              <OPTION VALUE="16" SELECTED>Medium</OPTION>
+              <OPTION VALUE="22">Large</OPTION>
+              <OPTION VALUE="30">Huge</OPTION>
+            </SELECT>
+          </TD>
+          <TD CLASS="NORMAL">
+            <a href="javascript:helpRoomCount()">Room Count</a>:
+          </TD>
+          <TD CLASS="NORMAL">
+            <SELECT NAME="roomcnt">
+              <OPTION VALUE="none">None</OPTION>
+              <OPTION VALUE="few">Few</OPTION>
+              <OPTION VALUE="some" SELECTED>Some</OPTION>
+              <OPTION VALUE="many">Many</OPTION>
+              <OPTION VALUE="lots">Too Many!</OPTION>
+            </SELECT>
+          </TD>
+        </TR>
+        <TR>
+          <TD CLASS="NORMAL">
+            <a href="javascript:helpHeight()">Height</a>:
+          </TD>
+          <TD CLASS="NORMAL">
+            <SELECT NAME="height">
+              <OPTION VALUE="2">Fine</OPTION>
+              <OPTION VALUE="4">Diminutive</OPTION>
+              <OPTION VALUE="8">Tiny</OPTION>
+              <OPTION VALUE="12">Small</OPTION>
+              <OPTION VALUE="16" SELECTED>Medium</OPTION>
+              <OPTION VALUE="22">Large</OPTION>
+              <OPTION VALUE="30">Huge</OPTION>
+            </SELECT>
+          </TD>
+          <TD CLASS="NORMAL">
+            <a href="javascript:helpRoomWidth()">Room Width</a>:
+          </TD>
+          <TD CLASS="NORMAL">
+            Between
+            <SELECT NAME="minroomw">
+              <OPTION VALUE="1">1</OPTION>
+              <OPTION SELECTED VALUE="2">2</OPTION>
+              <OPTION VALUE="3">3</OPTION>
+              <OPTION VALUE="4">4</OPTION>
+              <OPTION VALUE="5">5</OPTION>
+              <OPTION VALUE="6">6</OPTION>
+              <OPTION VALUE="7">7</OPTION>
+              <OPTION VALUE="8">8</OPTION>
+              <OPTION VALUE="9">9</OPTION>
+              <OPTION VALUE="10">10</OPTION>
+              <OPTION VALUE="11">11</OPTION>
+              <OPTION VALUE="12">12</OPTION>
+              <OPTION VALUE="13">13</OPTION>
+              <OPTION VALUE="14">14</OPTION>
+              <OPTION VALUE="15">15</OPTION>
+            </SELECT>
+            and
+            <SELECT NAME="maxroomw">
+              <OPTION VALUE="1">1</OPTION>
+              <OPTION VALUE="2">2</OPTION>
+              <OPTION VALUE="3">3</OPTION>
+              <OPTION VALUE="4">4</OPTION>
+              <OPTION SELECTED VALUE="5">5</OPTION>
+              <OPTION VALUE="6">6</OPTION>
+              <OPTION VALUE="7">7</OPTION>
+              <OPTION VALUE="8">8</OPTION>
+              <OPTION VALUE="9">9</OPTION>
+              <OPTION VALUE="10">10</OPTION>
+              <OPTION VALUE="11">11</OPTION>
+              <OPTION VALUE="12">12</OPTION>
+              <OPTION VALUE="13">13</OPTION>
+              <OPTION VALUE="14">14</OPTION>
+              <OPTION VALUE="15">15</OPTION>
+            </SELECT>
+            squares
+          </TD>
+        </TR>
+        <TR>
+          <TD CLASS="NORMAL">
+            <a href="javascript:helpSparseness()">Sparseness</a>:
+          </TD>
+          <TD CLASS="NORMAL">
+            <SELECT NAME="sparse">
+              <OPTION VALUE="very">Very Sparse</OPTION>
+              <OPTION VALUE="quite">Quite Sparse</OPTION>
+              <OPTION VALUE="some" SELECTED>Somewhat Sparse</OPTION>
+              <OPTION VALUE="crowd">A Bit Crowded</OPTION>
+              <OPTION VALUE="dense">Dense</OPTION>
+            </SELECT>
+          </TD>
+          <TD CLASS="NORMAL">
+            <a href="javascript:helpRoomHeight()">Room Height</a>:
+          </TD>
+          <TD CLASS="NORMAL">
+            Between
+            <SELECT NAME="minroomh">
+              <OPTION VALUE="1">1</OPTION>
+              <OPTION SELECTED VALUE="2">2</OPTION>
+              <OPTION VALUE="3">3</OPTION>
+              <OPTION VALUE="4">4</OPTION>
+              <OPTION VALUE="5">5</OPTION>
+              <OPTION VALUE="6">6</OPTION>
+              <OPTION VALUE="7">7</OPTION>
+              <OPTION VALUE="8">8</OPTION>
+              <OPTION VALUE="9">9</OPTION>
+              <OPTION VALUE="10">10</OPTION>
+              <OPTION VALUE="11">11</OPTION>
+              <OPTION VALUE="12">12</OPTION>
+              <OPTION VALUE="13">13</OPTION>
+              <OPTION VALUE="14">14</OPTION>
+              <OPTION VALUE="15">15</OPTION>
+            </SELECT>
+            and
+            <SELECT NAME="maxroomh">
+              <OPTION VALUE="1">1</OPTION>
+              <OPTION VALUE="2">2</OPTION>
+              <OPTION VALUE="3">3</OPTION>
+              <OPTION VALUE="4">4</OPTION>
+              <OPTION SELECTED VALUE="5">5</OPTION>
+              <OPTION VALUE="6">6</OPTION>
+              <OPTION VALUE="7">7</OPTION>
+              <OPTION VALUE="8">8</OPTION>
+              <OPTION VALUE="9">9</OPTION>
+              <OPTION VALUE="10">10</OPTION>
+              <OPTION VALUE="11">11</OPTION>
+              <OPTION VALUE="12">12</OPTION>
+              <OPTION VALUE="13">13</OPTION>
+              <OPTION VALUE="14">14</OPTION>
+              <OPTION VALUE="15">15</OPTION>
+            </SELECT>
+            squares
+          </TD>
+        </TR>
+        <TR>
+          <TD CLASS="NORMAL">
+            <a href="javascript:helpRandomness()">Randomness</a>:
+          </TD>
+          <TD CLASS="NORMAL">
+            <SELECT NAME="random">
+              <OPTION VALUE="0">0%</OPTION>
+              <OPTION VALUE="5">5%</OPTION>
+              <OPTION VALUE="10">10%</OPTION>
+              <OPTION VALUE="15">15%</OPTION>
+              <OPTION VALUE="20">20%</OPTION>
+              <OPTION VALUE="25">25%</OPTION>
+              <OPTION VALUE="30">30%</OPTION>
+              <OPTION VALUE="35">35%</OPTION>
+              <OPTION VALUE="40" SELECTED>40%</OPTION>
+              <OPTION VALUE="45">45%</OPTION>
+              <OPTION VALUE="50">50%</OPTION>
+              <OPTION VALUE="55">55%</OPTION>
+              <OPTION VALUE="60">60%</OPTION>
+              <OPTION VALUE="65">65%</OPTION>
+              <OPTION VALUE="70">70%</OPTION>
+              <OPTION VALUE="75">75%</OPTION>
+              <OPTION VALUE="80">80%</OPTION>
+              <OPTION VALUE="85">85%</OPTION>
+              <OPTION VALUE="90">90%</OPTION>
+              <OPTION VALUE="95">95%</OPTION>
+              <OPTION VALUE="100">100%</OPTION>
+            </SELECT>
+          </TD>
+          <TD CLASS="NORMAL">
+            <a href="javascript:helpSecretDoors()">Secret Doors</a>:
+          </TD>
+          <TD CLASS="NORMAL">
+            <SELECT NAME="secret">
+              <OPTION VALUE="0">0%</OPTION>
+              <OPTION VALUE="5" SElECTED>5%</OPTION>
+              <OPTION VALUE="10">10%</OPTION>
+              <OPTION VALUE="15">15%</OPTION>
+              <OPTION VALUE="20">20%</OPTION>
+              <OPTION VALUE="25">25%</OPTION>
+              <OPTION VALUE="30">30%</OPTION>
+              <OPTION VALUE="35">35%</OPTION>
+              <OPTION VALUE="40">40%</OPTION>
+              <OPTION VALUE="45">45%</OPTION>
+              <OPTION VALUE="50">50%</OPTION>
+              <OPTION VALUE="55">55%</OPTION>
+              <OPTION VALUE="60">60%</OPTION>
+              <OPTION VALUE="65">65%</OPTION>
+              <OPTION VALUE="70">70%</OPTION>
+              <OPTION VALUE="75">75%</OPTION>
+              <OPTION VALUE="80">80%</OPTION>
+              <OPTION VALUE="85">85%</OPTION>
+              <OPTION VALUE="90">90%</OPTION>
+              <OPTION VALUE="95">95%</OPTION>
+              <OPTION VALUE="100">100%</OPTION>
+            </SELECT>
+          </TD>
+        </TR>
+        <TR>
+          <TD CLASS="NORMAL">
+            <a href="javascript:helpDeadends()">Deadends Removed</a>:
+          </TD>
+          <TD CLASS="NORMAL">
+            <SELECT NAME="deadends">
+              <OPTION VALUE="0">0%</OPTION>
+              <OPTION VALUE="5">5%</OPTION>
+              <OPTION VALUE="10">10%</OPTION>
+              <OPTION VALUE="15">15%</OPTION>
+              <OPTION VALUE="20">20%</OPTION>
+              <OPTION VALUE="25">25%</OPTION>
+              <OPTION VALUE="30">30%</OPTION>
+              <OPTION VALUE="35">35%</OPTION>
+              <OPTION VALUE="40">40%</OPTION>
+              <OPTION VALUE="45">45%</OPTION>
+              <OPTION VALUE="50">50%</OPTION>
+              <OPTION VALUE="55">55%</OPTION>
+              <OPTION VALUE="60">60%</OPTION>
+              <OPTION VALUE="65">65%</OPTION>
+              <OPTION VALUE="70">70%</OPTION>
+              <OPTION VALUE="75" SELECTED>75%</OPTION>
+              <OPTION VALUE="80">80%</OPTION>
+              <OPTION VALUE="85">85%</OPTION>
+              <OPTION VALUE="90">90%</OPTION>
+              <OPTION VALUE="95">95%</OPTION>
+              <OPTION VALUE="100">100%</OPTION>
+            </SELECT>
+          </TD>
+          <TD CLASS="NORMAL">
+            <a href="javascript:helpConcealedDoors()">Concealed Doors</a>:
+          </TD>
+          <TD CLASS="NORMAL">
+            <SELECT NAME="concealed">
+              <OPTION VALUE="0">0%</OPTION>
+              <OPTION VALUE="5">5%</OPTION>
+              <OPTION VALUE="10" SELECTED>10%</OPTION>
+              <OPTION VALUE="15">15%</OPTION>
+              <OPTION VALUE="20">20%</OPTION>
+              <OPTION VALUE="25">25%</OPTION>
+              <OPTION VALUE="30">30%</OPTION>
+              <OPTION VALUE="35">35%</OPTION>
+              <OPTION VALUE="40">40%</OPTION>
+              <OPTION VALUE="45">45%</OPTION>
+              <OPTION VALUE="50">50%</OPTION>
+              <OPTION VALUE="55">55%</OPTION>
+              <OPTION VALUE="60">60%</OPTION>
+              <OPTION VALUE="65">65%</OPTION>
+              <OPTION VALUE="70">70%</OPTION>
+              <OPTION VALUE="75">75%</OPTION>
+              <OPTION VALUE="80">80%</OPTION>
+              <OPTION VALUE="85">85%</OPTION>
+              <OPTION VALUE="90">90%</OPTION>
+              <OPTION VALUE="95">95%</OPTION>
+              <OPTION VALUE="100">100%</OPTION>
+            </SELECT>
+          </TD>
+        </TR>
+        <TR>
+          <TD CLASS="NORMAL">
+            <a href="javascript:helpLevel()">Level</a>:
+          </TD>
+          <TD CLASS="NORMAL">
+            <SELECT NAME="level">
+              <OPTION VALUE="1">1</OPTION>
+              <OPTION VALUE="2">2</OPTION>
+              <OPTION VALUE="3">3</OPTION>
+              <OPTION VALUE="4">4</OPTION>
+              <OPTION VALUE="5">5</OPTION>
+              <OPTION VALUE="6">6</OPTION>
+              <OPTION VALUE="7">7</OPTION>
+              <OPTION VALUE="8">8</OPTION>
+              <OPTION VALUE="9">9</OPTION>
+              <OPTION VALUE="10">10</OPTION>
+              <OPTION VALUE="11">11</OPTION>
+              <OPTION VALUE="12">12</OPTION>
+              <OPTION VALUE="13">13</OPTION>
+              <OPTION VALUE="14">14</OPTION>
+              <OPTION VALUE="15">15</OPTION>
+              <OPTION VALUE="16">16</OPTION>
+              <OPTION VALUE="17">17</OPTION>
+              <OPTION VALUE="18">18</OPTION>
+              <OPTION VALUE="19">19</OPTION>
+              <OPTION VALUE="20">20</OPTION>
+            </SELECT>
+          </TD>
+          <TD CLASS="NORMAL">
+            <a href="javascript:helpGridResolution()">Grid Resolution</a>:
+          </TD>
+          <TD CLASS="NORMAL">
+            <SELECT NAME="resolution">
+              <OPTION VALUE="15">Small</OPTION>
+              <OPTION VALUE="20" SELECTED>Medium</OPTION>
+              <OPTION VALUE="25">Large</OPTION>
+            </SELECT>
+          </TD>
+        </TR>
+        <TR>
+          <TD COLSPAN=4 CLASS="NORMAL">
+            <a href="javascript:helpRandomSeed()">Random Seed</a>: <INPUT TYPE="TEXT" NAME="seed" SIZE=9>
+          </TD>
+        </TR>
+        <TR>
+          <TD COLSPAN=4 ALIGN=CENTER CLASS="NORMAL">
+            <INPUT TYPE="SUBMIT" VALUE="Generate Dungeon">
+          </TD>
+        </TR>
+      </TABLE>
+    </FORM>
+    </DIV>
+    <DIV CLASS="NORMAL">
+    <A HREF="<!--%CGINAME%-->">Restart the Dungeon generator</A>.
+    <p></p>
+
+    <hr />
+
+    <h2>Dungeon Generator-Related Links/Downloads</h2>
+
+    <p>Curious as to how this generator works?  Check it out here: <a href="dungeon_design.html"><em>Random Dungeon Design: The Secret Workings of Jamis Buck's Dungeon Generator</em></a>. By popular demand, I've put together a document describing it in relatively general terms, so that (hopefully) non-programmers can come away from it with an idea of what the generator does. </p>
+    
+    <p>Are you a programmer?  Would you like to download and tinker with the source code for this generator? The C and C++ source code may be obtained here: <a href="http://github.com/jamis/dnd-dungeon">http://github.com/jamis/dnd-dungeon</a></p>
+    </DIV>
+  </body>
+</html>
+

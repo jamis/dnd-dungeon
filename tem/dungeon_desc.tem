@@ -1,0 +1,39 @@
+<HTML>
+  <HEAD>
+    <TITLE>Dungeon Generator</TITLE>
+    <LINK REL="stylesheet" TYPE="text/css" HREF="generators.css" />
+  </HEAD>
+
+  <BODY>      
+    <p align="center"><em>Curious how this generator works?  Check out <a href="http://www.aarg.net/~minam/dungeon_design.html">Random Dungeon Design: The Secret Workings of Jamis Buck's Dungeon Generator</a></em></p>
+
+    <TABLE BORDER=1 ALIGN=CENTER><TR><TD><IMG SRC="<!--%MAPIMG%-->"></TD></TR></TABLE>
+
+    <P>
+    <DIV CLASS="NORMAL">
+      Current Random Seed: <!--%SEED%--><BR>
+    </DIV>
+    
+    <P>
+
+    <DIV CLASS="NORMAL">
+    <!--%ROOMDESC%-->
+    </DIV>
+
+    <HR SIZE=1>
+    <P>
+
+    <DIV CLASS="NORMAL">
+      This dungeon generator has received <B><!--%COUNTER%--></B> hits since 10 Nov 2000!<BR>
+      <p>
+      <small>
+      This dungeon generator incorporates data and information from the
+      <a href="http://www.rpg-e.com/enworld/generators/OGL.html">Open Gaming License</a> (OGL).
+      The algorithms to populate the rooms and the monster and room content data are from the
+      <a href="http://www.opengamingfoundation.org/srd.html">System Reference Document</a>.  All
+      other aspects of this program are Copyright 2000 by Jamis Buck.
+      </small>
+    </DIV>
+
+  </BODY>
+</HTML>

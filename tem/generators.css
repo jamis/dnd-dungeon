@@ -1,0 +1,123 @@
+BODY, .NORMAL
+  { COLOR:           #000000;
+    BACKGROUND:      #FFFFFF;
+    FONT:            90% "Arial", sans-serif;
+    FONT-STYLE:      normal;
+    FONT-WEIGHT:     normal;
+    TEXT-DECORATION: none; }
+
+.DATA
+  { COLOR:           #000000;
+    BACKGROUND:      #FFFFFF;
+    FONT:            90% "Arial", sans-serif;
+    FONT-STYLE:      normal;
+    FONT-WEIGHT:     bold;
+    TEXT-DECORATION: none; }
+
+.HEADER
+  { COLOR:           #FFFFFF;
+    BACKGROUND:      #00009F;
+    FONT:            90% "Arial", sans-serif;
+    FONT-STYLE:      normal;
+    FONT-WEIGHT:     bold;
+    TEXT-DECORATION: none; }
+
+.SUBLIMINAL
+  { COLOR:           #000000;
+    BACKGROUND:      #FFFFFF;
+    FONT:            70% "Arial", sans-serif;
+    FONT-STYLE:      italic;
+    FONT-WEIGHT:     normal;
+    TEXT-DECORATION: none; }
+
+.NAV
+  { BACKGROUND:      #000060; }
+
+.NAVHDR
+  { COLOR:           #FFFFFF;
+    BACKGROUND:      #00009F;
+    FONT:            70% "Arial", sans-serif;
+    FONT-STYLE:      normal;
+    FONT-WEIGHT:     bold;
+    TEXT-DECORATION: none; }
+
+.NAVNORM
+  { COLOR:           #FFFFFF;
+    FONT:            70% "Arial", sans-serif;
+    FONT-STYLE:      normal;
+    FONT-WEIGHT:     normal;
+    TEXT-DECORATION: none; }
+
+.NAVHDR A:link, .NAVHDR A:visited, .HEADER A:visited, .HEADER A:link
+  { COLOR:           #FFFF7F;
+    FONT-WEIGHT:     bold;
+    TEXT-DECORATION: underline; }
+
+.NAVNORM A:link, .NAVNORM A:visited
+  { COLOR:           #FFFF7F;
+    TEXT-DECORATION: underline; }
+
+A:link, A:visited
+  { COLOR:           #0000FF;
+    FONT-WEIGHT:     normal;
+    TEXT-DECORATION: underline; }
+
+H1
+  { COLOR:           #000000;
+    FONT-WEIGHT:     bold;
+    FONT:            200% "Arial", sans-serif; }
+
+H2
+  { COLOR:           #000000;
+    FONT-WEIGHT:     bold;
+    FONT:            165% "Arial", sans-serif; }
+
+H3
+  { COLOR:           #000000;
+    FONT-WEIGHT:     bold;
+    FONT:            110% "Arial", sans-serif; }
+
+B
+  { FONT-WEIGHT:     bold; }
+
+PRE
+  { FONT-FAMILY:     monospace; }
+
+CODE
+  { FONT-FAMILY:     monospace; }
+
+.DIVIDER
+  { COLOR:           #C8B078;
+    BACKGROUND:      #C8B078; }
+
+.BORDER
+  { BACKGROUND:      black; }
+
+.ASIDE
+  { COLOR:           #000000;
+    BACKGROUND:      #FFE0FF;
+    FONT:            90% "Arial", sans-serif;
+    FONT-STYLE:      normal;
+    FONT-WEIGHT:     normal;
+    TEXT-DECORATION: none; }
+
+BLOCKQUOTE, .DESC
+  { FONT:            90% "Arial", sans-serif;
+    COLOR:           #00007F;
+    FONT-STYLE:      italic; }
+
+.JROW
+  { BACKGROUND:      #CFCFFF;
+    FONT:            90% "Arial", sans-serif; }
+
+.SAROW
+  { BACKGROUND:      #FFFFFF;
+    FONT:            90% "Arial", sans-serif; }
+
+.SSROW
+  { BACKGROUND:      #FFCFCF;
+    FONT:            90% "Arial", sans-serif; }
+
+.DBROW
+  { BACKGROUND:      #AFFFAF;
+    FONT:            90% "Arial", sans-serif; }
